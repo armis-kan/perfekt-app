@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Canvas, useLoader, useFrame } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls, PerspectiveCamera, SpotLight } from '@react-three/drei';
@@ -59,7 +59,14 @@ const LightIndicator = ({ position }) => (
 );
 
 const CarWashAnimation = () => {
-  const model = useLoader(GLTFLoader, '/assets/models/model.glb');
+  const [model, setModel] = useState(null);
+  const gltf = useLoader(GLTFLoader, '/assets/models/model.glb');
+
+  useEffect(() => {
+    if (gltf) {
+      setModel(gltf);
+    }
+  }, [gltf]);
 
   if (!model) {
     return (

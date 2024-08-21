@@ -53,23 +53,20 @@ const LightIndicator = ({ position }) => (
   />
 );
 
-const CarWashAnimation = ({ onLoadingChange }) => {
+const CarWashAnimation = () => {
   const [model, setModel] = useState(null);
   const gltf = useLoader(GLTFLoader, '/assets/models/model.glb');
 
   useEffect(() => {
-    onLoadingChange(true); // Notify parent that loading is starting
     if (gltf) {
       setModel(gltf);
-      onLoadingChange(false); // Notify parent that loading is complete
     }
     return () => {
-      onLoadingChange(false); // Cleanup if component unmounts
     };
-  }, [gltf, onLoadingChange]);
+  }, [gltf]);
 
   if (!model) {
-    return null; // Render nothing while loading
+    return null;
   }
 
   return (

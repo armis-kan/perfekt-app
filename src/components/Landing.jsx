@@ -1,7 +1,7 @@
 import React from 'react';
 import CarWashAnimation from './CarWashAnimation';
 
-const Landing = ({ onLoadingChange }) => {
+const Landing = () => {
   return (
     <section id="landing" className="relative py-16 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm shadow-md overflow-x-hidden -z-30">
       {/* Background Text */}
@@ -13,7 +13,7 @@ const Landing = ({ onLoadingChange }) => {
 
       {/* Animation Container */}
       <div className="relative w-full h-[350px] sm:h-[350px] md:h-[400px] lg:h-[500px]">
-        <CarWashAnimation onLoadingChange={onLoadingChange} />
+        <CarWashAnimation />
       </div>
 
       {/* Bouncing Arrow */}

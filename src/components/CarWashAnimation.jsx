@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Canvas, useLoader, useFrame } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls, PerspectiveCamera, SpotLight } from '@react-three/drei';
@@ -53,21 +53,24 @@ const LightIndicator = ({ position }) => (
   />
 );
 
-const CarWashAnimation = ({ onLoadComplete }) => {
+const CarWashAnimation = ({ onLoadingChange }) => {
   const [model, setModel] = useState(null);
-  const [loading, setLoading] = useState(true); // New state for loading
   const gltf = useLoader(GLTFLoader, '/assets/models/model.glb');
 
   useEffect(() => {
+    onLoadingChange(true); // Notify parent that loading is starting
     if (gltf) {
       setModel(gltf);
-      setLoading(false);
+      onLoadingChange(false); // Notify parent that loading is complete
     }
-  }, [gltf]);
+    return () => {
+      onLoadingChange(false); // Cleanup if component unmounts
+    };
+  }, [gltf, onLoadingChange]);
 
-  useEffect(() => {
-    if (onLoadComplete) onLoadComplete(loading);
-  }, [loading, onLoadComplete]);
+  if (!model) {
+    return null; // Render nothing while loading
+  }
 
   return (
     <Canvas>
@@ -91,7 +94,7 @@ const CarWashAnimation = ({ onLoadComplete }) => {
       <OrbitControls />
       <WaterSpray targetPosition={[0, -1, 1]} gunPosition={[6, 3, 4]} />
       <WaterSpray targetPosition={[0, 1, 1]} gunPosition={[-6, 3, 4]} color='red' />
-      {model && <RotatingMesh model={model} />}
+      <RotatingMesh model={model} />
     </Canvas>
   );
 };

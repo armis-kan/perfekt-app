@@ -1,9 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Canvas, useLoader, useFrame } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls, PerspectiveCamera, SpotLight } from '@react-three/drei';
 import { motion } from 'framer-motion';
-import { Circle } from '@react-three/drei';
 import WaterSpray from './WaterSpray';
 
 const RotatingMesh = ({ model }) => {
@@ -24,17 +23,13 @@ const RotatingMesh = ({ model }) => {
       >
         <primitive object={model.scene} />
       </motion.mesh>
-      <Circle
-        args={[5.5, 64]}
+      <mesh
         position={[0, -1, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
       >
-        <meshStandardMaterial
-          color="black"
-          opacity={0.2}
-          transparent
-        />
-      </Circle>
+        <planeGeometry args={[5.5, 5.5]} />
+        <meshStandardMaterial color="black" opacity={0.2} transparent />
+      </mesh>
     </>
   );
 };
@@ -58,94 +53,45 @@ const LightIndicator = ({ position }) => (
   />
 );
 
-const CarWashAnimation = () => {
+const CarWashAnimation = ({ onLoadComplete }) => {
   const [model, setModel] = useState(null);
+  const [loading, setLoading] = useState(true); // New state for loading
   const gltf = useLoader(GLTFLoader, '/assets/models/model.glb');
 
   useEffect(() => {
     if (gltf) {
       setModel(gltf);
+      setLoading(false);
     }
   }, [gltf]);
 
-  if (!model) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
-        <div className="w-16 h-16 border-4 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (onLoadComplete) onLoadComplete(loading);
+  }, [loading, onLoadComplete]);
 
   return (
     <Canvas>
       <ambientLight intensity={0.4} />
-
       <directionalLight
         position={[10, 10, 10]}
         intensity={1}
         castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-        shadow-camera-near={0.5}
-        shadow-camera-far={500}
-        shadow-camera-left={-20}
-        shadow-camera-right={20}
-        shadow-camera-top={20}
-        shadow-camera-bottom={-20}
       />
       <directionalLight
         position={[-10, 10, 10]}
         intensity={1}
         castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-        shadow-camera-near={0.5}
-        shadow-camera-far={500}
-        shadow-camera-left={-20}
-        shadow-camera-right={20}
-        shadow-camera-top={20}
-        shadow-camera-bottom={-20}
       />
-      <directionalLight
-        position={[10, 10, -10]}
-        intensity={1}
-        castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-        shadow-camera-near={0.5}
-        shadow-camera-far={500}
-        shadow-camera-left={-20}
-        shadow-camera-right={20}
-        shadow-camera-top={20}
-        shadow-camera-bottom={-20}
-      />
-      <directionalLight
-        position={[-10, 10, -10]}
-        intensity={1}
-        castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-        shadow-camera-near={0.5}
-        shadow-camera-far={500}
-        shadow-camera-left={-20}
-        shadow-camera-right={20}
-        shadow-camera-top={20}
-        shadow-camera-bottom={-20}
-      />
-
       {/* White Spot Lights */}
       <LightIndicator position={[5, 5, 5]} />
       <LightIndicator position={[-5, 5, 5]} />
       <LightIndicator position={[5, 5, -5]} />
       <LightIndicator position={[-5, 5, -5]} />
-
       <PerspectiveCamera makeDefault position={[8, 3, 8]} rotation={[-Math.PI / 4, Math.PI / 4, 0]} />
       <OrbitControls />
-
       <WaterSpray targetPosition={[0, -1, 1]} gunPosition={[6, 3, 4]} />
       <WaterSpray targetPosition={[0, 1, 1]} gunPosition={[-6, 3, 4]} color='red' />
-
-      <RotatingMesh model={model} />
+      {model && <RotatingMesh model={model} />}
     </Canvas>
   );
 };

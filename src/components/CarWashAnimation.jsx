@@ -59,7 +59,7 @@ const LightIndicator = ({ position }) => (
 );
 
 const CarWashAnimation = () => {
-  const model = useLoader(GLTFLoader, '/assets/models/Audi_rs6.glb');
+  const model = useLoader(GLTFLoader, '/assets/models/model.glb');
 
   if (!model) {
     return <div>Loading...</div>;

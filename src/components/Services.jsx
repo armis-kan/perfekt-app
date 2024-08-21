@@ -22,7 +22,7 @@ const Services = () => {
                         <span
                             className="py-1 px-4 bg-indigo-100 rounded-full text-xs font-medium text-indigo-600 text-center">Usluge</span>
                         <h2 className="text-4xl text-center font-bold text-gray-900 py-5">
-                            Nudimo fantastične usluge
+                            Nudimo perfektne usluge
                         </h2>
                         <p className="text-lg font-normal text-gray-500 max-w-md md:max-w-2xl mx-auto">
                             Ponosno Vam predstavljamo najbolje osigurane ponude

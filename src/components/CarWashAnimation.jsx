@@ -8,10 +8,10 @@ import WaterSpray from './WaterSpray';
 
 const RotatingMesh = ({ model }) => {
   const meshRef = useRef();
-  
+
   useFrame(() => {
     if (meshRef.current) {
-      meshRef.current.rotation.y += 0.001; 
+      meshRef.current.rotation.y += 0.001;
     }
   });
 
@@ -20,18 +20,18 @@ const RotatingMesh = ({ model }) => {
       <motion.mesh
         ref={meshRef}
         scale={[3, 3, 3]}
-        position={[0, -1, 0]} 
+        position={[0, -1, 0]}
       >
         <primitive object={model.scene} />
       </motion.mesh>
       <Circle
-        args={[5.5, 64]} 
+        args={[5.5, 64]}
         position={[0, -1, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
       >
         <meshStandardMaterial
           color="black"
-          opacity={0.2} 
+          opacity={0.2}
           transparent
         />
       </Circle>
@@ -42,9 +42,9 @@ const RotatingMesh = ({ model }) => {
 const LightIndicator = ({ position }) => (
   <SpotLight
     position={position}
-    angle={Math.PI / 6} 
-    penumbra={1} 
-    intensity={1.5} 
+    angle={Math.PI / 6}
+    penumbra={1}
+    intensity={1.5}
     color="white"
     castShadow
     shadow-mapSize-width={2048}
@@ -62,16 +62,20 @@ const CarWashAnimation = () => {
   const model = useLoader(GLTFLoader, '/assets/models/model.glb');
 
   if (!model) {
-    return <div>Loading...</div>;
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
+        <div className="w-16 h-16 border-4 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   return (
     <Canvas>
       <ambientLight intensity={0.4} />
 
-      <directionalLight 
-        position={[10, 10, 10]} 
-        intensity={1} 
+      <directionalLight
+        position={[10, 10, 10]}
+        intensity={1}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -82,9 +86,9 @@ const CarWashAnimation = () => {
         shadow-camera-top={20}
         shadow-camera-bottom={-20}
       />
-      <directionalLight 
-        position={[-10, 10, 10]} 
-        intensity={1} 
+      <directionalLight
+        position={[-10, 10, 10]}
+        intensity={1}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -95,9 +99,9 @@ const CarWashAnimation = () => {
         shadow-camera-top={20}
         shadow-camera-bottom={-20}
       />
-      <directionalLight 
-        position={[10, 10, -10]} 
-        intensity={1} 
+      <directionalLight
+        position={[10, 10, -10]}
+        intensity={1}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -108,9 +112,9 @@ const CarWashAnimation = () => {
         shadow-camera-top={20}
         shadow-camera-bottom={-20}
       />
-      <directionalLight 
-        position={[-10, 10, -10]} 
-        intensity={1} 
+      <directionalLight
+        position={[-10, 10, -10]}
+        intensity={1}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
